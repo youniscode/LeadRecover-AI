@@ -88,6 +88,7 @@ leadrecover-ai/
     ├── main.tsx                      # React entry, providers
     ├── App.tsx                       # Router definition
     ├── index.css                     # Tailwind directives + globals
+    ├── test-setup.ts                 # Vitest setup importing @testing-library/jest-dom/vitest
     │
     ├── types/
     │   └── lead.ts                   # Lead, LeadStatus, LeadFormData
