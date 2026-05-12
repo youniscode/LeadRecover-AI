@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useLeads } from '../../store/LeadContext'
+import { useLanguage } from '../../store/LanguageContext'
 import { Card, CardContent } from '../../components/ui/Card'
 import { Badge } from '../../components/ui/Badge'
 import type { LeadStatus } from '../../types/lead'
@@ -17,6 +18,7 @@ function formatDate(iso: string): string {
 
 function LeadListPage() {
   const { leads, loaded } = useLeads()
+  const { t } = useLanguage()
   const [filter, setFilter] = useState<LeadStatus | 'All'>('All')
 
   const filtered = useMemo(() => {
@@ -30,7 +32,7 @@ function LeadListPage() {
   if (!loaded) {
     return (
       <div className="flex items-center justify-center p-12">
-        <p className="text-gray-500">Loading...</p>
+        <p className="text-gray-500">{t('common.loading')}</p>
       </div>
     )
   }
@@ -39,18 +41,18 @@ function LeadListPage() {
     return (
       <div className="px-4 py-12">
         <div className="mx-auto max-w-4xl">
-          <h1 className="mb-8 text-2xl font-bold text-gray-900">Leads</h1>
+          <h1 className="mb-8 text-2xl font-bold text-gray-900">{t('leads.title')}</h1>
           <Card>
             <CardContent>
               <div className="py-12 text-center">
                 <p className="mb-6 text-lg text-gray-600">
-                  No leads yet. Create your first lead.
+                  {t('leads.empty')}
                 </p>
                 <Link
                   to="/leads/new"
                   className="inline-flex items-center justify-center rounded bg-blue-600 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-700"
                 >
-                  Create Your First Lead
+                  {t('leads.emptyCta')}
                 </Link>
               </div>
             </CardContent>
@@ -64,12 +66,12 @@ function LeadListPage() {
     <div className="px-4 py-12">
       <div className="mx-auto max-w-4xl">
         <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-          <h1 className="text-2xl font-bold text-gray-900">Leads</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{t('leads.title')}</h1>
           <Link
             to="/leads/new"
             className="inline-flex items-center justify-center rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
           >
-            + Add Lead
+            {t('leads.addLead')}
           </Link>
         </div>
 
@@ -84,7 +86,7 @@ function LeadListPage() {
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              {s}
+              {t(`common.status.${s}`)}
             </button>
           ))}
         </div>
@@ -93,7 +95,7 @@ function LeadListPage() {
           <Card>
             <CardContent>
               <p className="py-8 text-center text-gray-500">
-                No leads match this filter.
+                {t('leads.emptyFilter')}
               </p>
             </CardContent>
           </Card>
@@ -115,7 +117,7 @@ function LeadListPage() {
                     )}
                   </div>
                   <div className="flex items-center gap-3">
-                    <Badge variant={lead.status}>{lead.status}</Badge>
+                    <Badge variant={lead.status}>{t(`common.status.${lead.status}`)}</Badge>
                     <span className="hidden text-xs text-gray-400 sm:inline">
                       {formatDate(lead.createdAt)}
                     </span>

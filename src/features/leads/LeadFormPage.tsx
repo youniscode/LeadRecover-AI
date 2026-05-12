@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLeads } from '../../store/LeadContext'
+import { useLanguage } from '../../store/LanguageContext'
 import { Input } from '../../components/ui/Input'
 import { Button } from '../../components/ui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
@@ -9,6 +10,7 @@ import type { LeadFormData } from '../../types/lead'
 function LeadFormPage() {
   const navigate = useNavigate()
   const { addLead } = useLeads()
+  const { t } = useLanguage()
 
   const [form, setForm] = useState<LeadFormData>({
     name: '',
@@ -29,7 +31,7 @@ function LeadFormPage() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!form.name.trim()) {
-      setError('Name is required')
+      setError(t('leads.form.nameRequired'))
       return
     }
     addLead(form)
@@ -40,57 +42,57 @@ function LeadFormPage() {
     <div className="mx-auto max-w-lg px-4 py-12">
       <Card>
         <CardHeader>
-          <CardTitle>Add Lead</CardTitle>
+          <CardTitle>{t('leads.form.title')}</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit}>
             <Input
-              label="Name"
+              label={t('leads.form.name')}
               name="name"
               value={form.name}
               onChange={handleChange}
               required
-              placeholder="Lead name"
+              placeholder={t('leads.form.namePlaceholder')}
               error={error}
             />
             <Input
-              label="Phone"
+              label={t('leads.form.phone')}
               name="phone"
               value={form.phone}
               onChange={handleChange}
-              placeholder="+1 555-0100"
+              placeholder={t('leads.form.phonePlaceholder')}
             />
             <Input
-              label="Email"
+              label={t('leads.form.email')}
               name="email"
               value={form.email}
               onChange={handleChange}
               type="email"
-              placeholder="lead@example.com"
+              placeholder={t('leads.form.emailPlaceholder')}
             />
             <Input
-              label="Business Name"
+              label={t('leads.form.businessName')}
               name="businessName"
               value={form.businessName}
               onChange={handleChange}
-              placeholder="Their business name"
+              placeholder={t('leads.form.businessPlaceholder')}
             />
             <Input
-              label="Notes"
+              label={t('leads.form.notes')}
               name="notes"
               value={form.notes}
               onChange={handleChange}
               textarea
-              placeholder="Any additional information"
+              placeholder={t('leads.form.notesPlaceholder')}
             />
             <div className="flex gap-3">
-              <Button type="submit">Save Lead</Button>
+              <Button type="submit">{t('leads.form.save')}</Button>
               <Button
                 type="button"
                 variant="ghost"
                 onClick={() => navigate('/leads')}
               >
-                Cancel
+                {t('leads.form.cancel')}
               </Button>
             </div>
           </form>

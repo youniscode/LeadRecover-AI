@@ -1,6 +1,6 @@
 # LeadRecover AI — Project Map
 
-> **Status:** M1–M10 complete. M11–M12 pending.
+> **Status:** MVP complete. Bilingual (EN/FR) with simple translation system.
 
 ## [TECH_STACK]
 
@@ -66,6 +66,7 @@ User Browser
 - Feature-based directory structure.
 - Shared/core code only when reused across features.
 - Minimum file count — no excessive splitting.
+- No external i18n library. Simple dictionary-based translation system with React Context.
 - No external state management library. React Context + `useReducer`.
 - No form library. Plain `useState` + native form validation.
 - No UI component library. 4 hand-crafted primitives with Tailwind.
@@ -96,10 +97,12 @@ leadrecover-ai/
     ├── lib/
     │   ├── logger.ts                 # Lightweight frontend logger
     │   ├── storage.ts                # localStorage wrapper
-    │   └── templates.ts              # Message template functions
+    │   ├── templates.ts              # Message template functions
+    │   └── translations.ts           # EN/FR dictionaries (no i18n library)
     │
     ├── store/
-    │   └── LeadContext.tsx            # Context + useReducer + localStorage sync
+    │   ├── LeadContext.tsx            # Context + useReducer + localStorage sync
+    │   └── LanguageContext.tsx        # Language state + t() hook + persistence
     │
     ├── components/
     │   ├── Layout.tsx                # PublicLayout + AppLayout (Outlet)
@@ -125,7 +128,7 @@ leadrecover-ai/
             └── ReviewGeneratorPage.tsx
 ```
 
-**Total: ~40 source files (M1–M10 complete).**
+**Total: ~42 source files.**
 
 ---
 
@@ -197,7 +200,36 @@ interface LeadContextValue {
 }
 ```
 
+## [LANGUAGE]
+
+### Strategy: Simple Dictionary-Based Translation
+
+File: `src/lib/translations.ts`
+
+- No i18next or external i18n library.
+- Two flat dictionaries (`en` and `fr`) with nested keys.
+- `t(key)` function does dot-path lookup via `getNested()`.
+- Template messages (reply/review) are stored as lambda functions inside the dictionaries for language-specific text.
+- Context labels and status labels are part of the dictionary.
+
+### Provider (`store/LanguageContext.tsx`)
+
+```ts
+interface LanguageContextValue {
+  lang: Language;       // 'en' | 'fr'
+  setLang: (lang: Language) => void;
+  t: (key: string) => string;  // dot-path lookup
+}
+```
+
+- Default language: `fr`.
+- Persisted to localStorage under `leadrecover:language`.
+- Reads persisted value on mount via `useEffect`.
+- `FR | EN` switcher rendered in both `PublicLayout` and `AppLayout` headers.
+
 No fine-grained selectors. No derived state outside of component-level `useMemo`.
+
+---
 
 ---
 
@@ -207,6 +239,7 @@ No fine-grained selectors. No derived state outside of component-level `useMemo`
 |---|---|---|---|
 | `leadrecover:leads` | `Lead[]` | JSON array | Full lead list |
 | `leadrecover:version` | `"1"` | string | Schema version for future migrations |
+| `leadrecover:language` | `"fr"` \| `"en"` | string | Language preference (default: fr) |
 
 ### Wrapper (`lib/storage.ts`)
 
@@ -270,14 +303,14 @@ export const logger = {
 
 | Feature | Files | Complexity | Depends On |
 |---|---|---|---|
-| Landing page | `LandingPage.tsx` | Static HTML + Tailwind | Layout, Button |
-| Pricing page | `PricingPage.tsx` | Static HTML + Tailwind | Layout, Button, Card |
-| Dashboard | `DashboardPage.tsx` | Derived counts from context | LeadContext, Card, Badge |
-| Lead list | `LeadListPage.tsx` | Table, filter, sort | LeadContext, Badge |
-| Lead form | `LeadFormPage.tsx` | Controlled form, validation | LeadContext, Input, Button |
-| Lead detail | `LeadDetailPage.tsx` | Status dropdown, delete button | LeadContext, Badge, Button |
-| Reply generator | `ReplyGeneratorPage.tsx` | Select lead + context → copy text | LeadContext, templates |
-| Review generator | `ReviewGeneratorPage.tsx` | Select lead → copy text | LeadContext, templates |
+| Landing page | `LandingPage.tsx` | Static HTML + Tailwind | LanguageContext, Layout, Button |
+| Pricing page | `PricingPage.tsx` | Static HTML + Tailwind | LanguageContext, Layout, Button, Card |
+| Dashboard | `DashboardPage.tsx` | Derived counts from context | LanguageContext, LeadContext, Card, Badge |
+| Lead list | `LeadListPage.tsx` | Table, filter, sort | LanguageContext, LeadContext, Badge |
+| Lead form | `LeadFormPage.tsx` | Controlled form, validation | LanguageContext, LeadContext, Input, Button |
+| Lead detail | `LeadDetailPage.tsx` | Status dropdown, delete button | LanguageContext, LeadContext, Badge, Button |
+| Reply generator | `ReplyGeneratorPage.tsx` | Select lead + context → copy text | LanguageContext, LeadContext, translations |
+| Review generator | `ReviewGeneratorPage.tsx` | Select lead → copy text | LanguageContext, LeadContext, translations |
 
 ### Message Templates (`lib/templates.ts`)
 
@@ -341,3 +374,4 @@ Commands:
 | ID generation | `crypto.randomUUID()` — built-in, no dependency. |
 | Router API | `createBrowserRouter` from react-router-dom v7. |
 | Test convention | Co-located `*.test.ts` / `*.test.tsx` files next to source. |
+| i18n approach | No external library. Simple `{ en, fr }` dictionary + `t(key)` dot-path lookup via React Context. Default: French. Persisted to localStorage `leadrecover:language`. |

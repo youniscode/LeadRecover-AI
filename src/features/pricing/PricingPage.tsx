@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
+import { useLanguage } from '../../store/LanguageContext'
+import { translations } from '../../lib/translations'
 
 interface PlanProps {
   name: string
@@ -12,63 +14,49 @@ interface PlanProps {
   highlighted?: boolean
 }
 
-const plans: PlanProps[] = [
-  {
-    name: 'Free',
-    price: '€0',
-    period: 'forever',
-    description: 'Try the public demo.',
-    features: [
-      'Lead capture form',
-      'Pipeline management',
-      'Reply templates',
-      'Review request templates',
-      'LocalStorage persistence',
-    ],
-    cta: 'Try the demo',
-    to: '/dashboard',
-  },
-  {
-    name: '€99 setup service',
-    price: '€99',
-    period: 'one-time',
-    description: 'Business setup + custom messages + walkthrough.',
-    features: [
-      'Everything in Free',
-      'Custom follow-up message for your business',
-      'Google review request message written for you',
-      '20-minute walkthrough',
-      'Simple usage guide',
-    ],
-    cta: 'Get started',
-    to: 'mailto:contact@jonascode.com?subject=LeadRecover AI setup request',
-    highlighted: true,
-  },
-  {
-    name: 'Custom setup',
-    price: 'Custom',
-    period: '',
-    description: 'Team or agency setup.',
-    features: [
-      'Everything in Free',
-      'Tailored setup for your team',
-      'Custom templates and workflow',
-      'Priority support',
-    ],
-    cta: 'Contact me',
-    to: 'mailto:contact@jonascode.com?subject=LeadRecover AI custom setup',
-  },
-]
-
 function PricingPage() {
+  const { lang, t } = useLanguage()
+  const p = translations[lang].pricing
+
+  const plans: PlanProps[] = [
+    {
+      name: p.free.name,
+      price: p.free.price,
+      period: p.free.period,
+      description: p.free.description,
+      features: p.free.features,
+      cta: p.free.cta,
+      to: '/dashboard',
+    },
+    {
+      name: p.setup.name,
+      price: p.setup.price,
+      period: p.setup.period,
+      description: p.setup.description,
+      features: p.setup.features,
+      cta: p.setup.cta,
+      to: 'mailto:contact@jonascode.com?subject=LeadRecover AI setup request',
+      highlighted: true,
+    },
+    {
+      name: p.custom.name,
+      price: p.custom.price,
+      period: p.custom.period,
+      description: p.custom.description,
+      features: p.custom.features,
+      cta: p.custom.cta,
+      to: 'mailto:contact@jonascode.com?subject=LeadRecover AI custom setup',
+    },
+  ]
+
   return (
     <div className="px-4 py-16">
       <div className="mx-auto max-w-6xl">
         <h1 className="mb-2 text-center text-4xl font-bold text-gray-900">
-          Simple pricing
+          {t('pricing.title')}
         </h1>
         <p className="mx-auto mb-12 max-w-2xl text-center text-gray-600">
-          Try the public demo, or get a configured business setup.
+          {t('pricing.subtitle')}
         </p>
 
         <div className="grid gap-6 md:grid-cols-3">
@@ -79,14 +67,14 @@ function PricingPage() {
             >
               {plan.highlighted && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-blue-600 px-3 py-1 text-xs font-medium text-white">
-                  Most popular
+                  {t('pricing.mostPopular')}
                 </div>
               )}
               <CardHeader>
                 <CardTitle>{plan.name}</CardTitle>
                 <div className="mt-2">
                   <span className="text-3xl font-bold text-gray-900">{plan.price}</span>
-                  <span className="ml-1 text-sm text-gray-500">{plan.period}</span>
+                  {plan.period && <span className="ml-1 text-sm text-gray-500">{plan.period}</span>}
                 </div>
                 <p className="mt-1 text-sm text-gray-500">{plan.description}</p>
               </CardHeader>
@@ -118,7 +106,7 @@ function PricingPage() {
                   to="/leads"
                   className="mt-2 block w-full rounded px-4 py-2 text-center text-sm text-gray-500 transition-colors hover:text-gray-700"
                 >
-                  View Leads
+                  {t('pricing.viewLeads')}
                 </Link>
               </CardContent>
             </Card>
@@ -126,8 +114,7 @@ function PricingPage() {
         </div>
 
         <p className="mt-12 text-center text-sm text-gray-400">
-          No authentication required. No backend. All data stays in
-          your browser. The €99 setup service is handled via email.
+          {t('pricing.footer')}
         </p>
       </div>
     </div>

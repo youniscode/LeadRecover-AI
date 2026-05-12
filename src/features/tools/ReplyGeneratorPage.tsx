@@ -1,20 +1,15 @@
 import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useLeads } from '../../store/LeadContext'
-import { generateReply } from '../../lib/templates'
+import { useLanguage } from '../../store/LanguageContext'
+import { translations } from '../../lib/translations'
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
 import { Button } from '../../components/ui/Button'
 import type { ReplyContext } from '../../types/lead'
 
-const contextOptions: { value: ReplyContext; label: string }[] = [
-  { value: 'price_inquiry', label: 'Price Inquiry' },
-  { value: 'scheduling', label: 'Scheduling' },
-  { value: 'follow_up', label: 'Follow-up' },
-  { value: 'general', label: 'General' },
-]
-
 function ReplyGeneratorPage() {
   const { leads } = useLeads()
+  const { lang, t } = useLanguage()
   const [selectedId, setSelectedId] = useState('')
   const [context, setContext] = useState<ReplyContext>('general')
   const [message, setMessage] = useState('')
@@ -25,19 +20,21 @@ function ReplyGeneratorPage() {
     [leads],
   )
 
+  const contextOptions = translations[lang].reply.contextOptions
+
   if (leads.length === 0) {
     return (
       <div className="px-4 py-12">
         <div className="mx-auto max-w-lg text-center">
-          <h1 className="mb-4 text-2xl font-bold text-gray-900">Reply Generator</h1>
+          <h1 className="mb-4 text-2xl font-bold text-gray-900">{t('reply.title')}</h1>
           <p className="mb-6 text-gray-600">
-            No leads yet. Create a lead first to generate replies.
+            {t('reply.empty')}
           </p>
           <Link
             to="/leads/new"
             className="inline-flex items-center justify-center rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
           >
-            Create a Lead
+            {t('reply.emptyCta')}
           </Link>
         </div>
       </div>
@@ -48,7 +45,8 @@ function ReplyGeneratorPage() {
     if (!selectedId) return
     const lead = leads.find((l) => l.id === selectedId)
     if (!lead) return
-    setMessage(generateReply(lead, context))
+    const fn = translations[lang].templates.reply[context]
+    setMessage(fn(lead.name, lead.businessName))
     setCopied(false)
   }
 
@@ -65,11 +63,11 @@ function ReplyGeneratorPage() {
   return (
     <div className="px-4 py-12">
       <div className="mx-auto max-w-lg">
-        <h1 className="mb-6 text-2xl font-bold text-gray-900">Reply Generator</h1>
+        <h1 className="mb-6 text-2xl font-bold text-gray-900">{t('reply.title')}</h1>
 
         <Card className="mb-6">
           <CardHeader>
-            <CardTitle>Select Lead</CardTitle>
+            <CardTitle>{t('reply.selectLead')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
@@ -77,7 +75,7 @@ function ReplyGeneratorPage() {
                 htmlFor="lead-select"
                 className="mb-1 block text-sm font-medium text-gray-700"
               >
-                Lead
+                {t('reply.lead')}
               </label>
               <select
                 id="lead-select"
@@ -89,7 +87,7 @@ function ReplyGeneratorPage() {
                 }}
                 className="block w-full rounded border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
               >
-                <option value="">Select a lead...</option>
+                <option value="">{t('reply.selectPlaceholder')}</option>
                 {sortedLeads.map((l) => (
                   <option key={l.id} value={l.id}>
                     {l.name}{l.businessName ? ` — ${l.businessName}` : ''}
@@ -103,7 +101,7 @@ function ReplyGeneratorPage() {
                 htmlFor="context-select"
                 className="mb-1 block text-sm font-medium text-gray-700"
               >
-                Context
+                {t('reply.context')}
               </label>
               <select
                 id="context-select"
@@ -115,7 +113,7 @@ function ReplyGeneratorPage() {
                 }}
                 className="block w-full rounded border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
               >
-                {contextOptions.map((o) => (
+                {contextOptions.map((o: { value: string; label: string }) => (
                   <option key={o.value} value={o.value}>
                     {o.label}
                   </option>
@@ -124,7 +122,7 @@ function ReplyGeneratorPage() {
             </div>
 
             <Button onClick={handleGenerate} disabled={!selectedId}>
-              Generate Reply
+              {t('reply.generate')}
             </Button>
           </CardContent>
         </Card>
@@ -132,7 +130,7 @@ function ReplyGeneratorPage() {
         {message && (
           <Card>
             <CardHeader>
-              <CardTitle>Generated Reply</CardTitle>
+              <CardTitle>{t('reply.generatedTitle')}</CardTitle>
             </CardHeader>
             <CardContent>
               <textarea
@@ -143,11 +141,11 @@ function ReplyGeneratorPage() {
               />
               <div className="flex items-center gap-3">
                 <Button onClick={handleCopy}>
-                  {copied ? 'Copied!' : 'Copy to Clipboard'}
+                  {copied ? t('reply.copied') : t('reply.copy')}
                 </Button>
                 {copied && (
                   <span className="text-sm text-green-600">
-                    Message copied
+                    {t('reply.copiedMsg')}
                   </span>
                 )}
               </div>

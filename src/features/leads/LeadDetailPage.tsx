@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useLeads } from '../../store/LeadContext'
+import { useLanguage } from '../../store/LanguageContext'
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
 import { Badge } from '../../components/ui/Badge'
 import { Button } from '../../components/ui/Button'
@@ -22,6 +23,7 @@ function LeadDetailPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { getLeadById, updateStatus, deleteLead } = useLeads()
+  const { t } = useLanguage()
   const [deleting, setDeleting] = useState(false)
 
   const lead = id ? getLeadById(id) : undefined
@@ -30,15 +32,15 @@ function LeadDetailPage() {
     return (
       <div className="px-4 py-12">
         <div className="mx-auto max-w-lg text-center">
-          <h1 className="mb-4 text-2xl font-bold text-gray-900">Lead not found</h1>
+          <h1 className="mb-4 text-2xl font-bold text-gray-900">{t('leads.notFound')}</h1>
           <p className="mb-6 text-gray-600">
-            This lead may have been deleted or the link is incorrect.
+            {t('leads.notFoundText')}
           </p>
           <Link
             to="/leads"
             className="text-sm font-medium text-blue-600 hover:text-blue-800"
           >
-            &larr; Back to Leads
+            {t('leads.backToLeads')}
           </Link>
         </div>
       </div>
@@ -52,7 +54,7 @@ function LeadDetailPage() {
   }
 
   function handleDelete() {
-    if (!window.confirm('Are you sure you want to delete this lead?')) return
+    if (!window.confirm(t('leads.detail.confirmDelete'))) return
     setDeleting(true)
     deleteLead(currentLead.id)
     navigate('/leads')
@@ -65,7 +67,7 @@ function LeadDetailPage() {
           to="/leads"
           className="mb-6 inline-block text-sm font-medium text-blue-600 hover:text-blue-800"
         >
-          &larr; Back to Leads
+          {t('leads.backToLeads')}
         </Link>
 
         <Card>
@@ -77,20 +79,20 @@ function LeadDetailPage() {
                   <p className="mt-1 text-sm text-gray-500">{lead.businessName}</p>
                 )}
               </div>
-              <Badge variant={lead.status}>{lead.status}</Badge>
+              <Badge variant={lead.status}>{t(`common.status.${lead.status}`)}</Badge>
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
-                  Phone
+                  {t('leads.detail.phone')}
                 </p>
                 <p className="text-sm text-gray-900">{lead.phone || '—'}</p>
               </div>
               <div>
                 <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
-                  Email
+                  {t('leads.detail.email')}
                 </p>
                 <p className="text-sm text-gray-900">{lead.email || '—'}</p>
               </div>
@@ -98,7 +100,7 @@ function LeadDetailPage() {
 
             <div>
               <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
-                Notes
+                {t('leads.detail.notes')}
               </p>
               <p className="whitespace-pre-wrap text-sm text-gray-900">
                 {lead.notes || '—'}
@@ -108,13 +110,13 @@ function LeadDetailPage() {
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
-                  Created
+                  {t('leads.detail.created')}
                 </p>
                 <p className="text-sm text-gray-900">{formatDate(lead.createdAt)}</p>
               </div>
               <div>
                 <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
-                  Updated
+                  {t('leads.detail.updated')}
                 </p>
                 <p className="text-sm text-gray-900">{formatDate(lead.updatedAt)}</p>
               </div>
@@ -122,7 +124,7 @@ function LeadDetailPage() {
 
             <div>
               <p className="mb-1 text-xs font-medium uppercase tracking-wide text-gray-400">
-                Status
+                {t('leads.detail.status')}
               </p>
               <select
                 value={lead.status}
@@ -131,7 +133,7 @@ function LeadDetailPage() {
               >
                 {statusOptions.map((s) => (
                   <option key={s} value={s}>
-                    {s}
+                    {t(`common.status.${s}`)}
                   </option>
                 ))}
               </select>
@@ -139,7 +141,7 @@ function LeadDetailPage() {
 
             <div className="pt-2">
               <Button variant="danger" onClick={handleDelete} disabled={deleting}>
-                {deleting ? 'Deleting...' : 'Delete Lead'}
+                {deleting ? t('leads.detail.deleting') : t('leads.detail.delete')}
               </Button>
             </div>
           </CardContent>
