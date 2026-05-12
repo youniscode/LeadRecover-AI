@@ -25,37 +25,38 @@ const plans: PlanProps[] = [
       'Review request templates',
       'LocalStorage persistence',
     ],
-    cta: 'Start Free',
+    cta: 'Try the demo',
     to: '/dashboard',
   },
   {
-    name: 'Pro',
-    price: '€29',
-    period: '/month',
-    description: 'For solo local business owners.',
+    name: '€99 setup service',
+    price: '€99',
+    period: 'one-time',
+    description: 'Done-for-you setup with a 20-minute walkthrough.',
     features: [
       'Everything in Free',
-      'Priority features access',
-      'Future: data export',
-      'Future: email reminders',
+      'Custom follow-up message for your business',
+      'Google review request message written for you',
+      '20-minute walkthrough',
+      'Simple usage guide',
     ],
-    cta: 'Start Free',
-    to: '/dashboard',
+    cta: 'Get started',
+    to: 'mailto:contact@jonascode.com?subject=LeadRecover AI setup request',
     highlighted: true,
   },
   {
-    name: 'Business',
-    price: '€79',
-    period: '/month',
-    description: 'For teams or agencies.',
+    name: 'Custom setup',
+    price: 'Custom',
+    period: '',
+    description: 'For teams or agencies with unique needs.',
     features: [
-      'Everything in Pro',
-      'Future: team accounts',
-      'Future: shared pipeline',
-      'Future: advanced analytics',
+      'Everything in Free',
+      'Tailored setup for your team',
+      'Custom templates and workflow',
+      'Priority support',
     ],
-    cta: 'Start Free',
-    to: '/dashboard',
+    cta: 'Contact me',
+    to: 'mailto:contact@jonascode.com?subject=LeadRecover AI custom setup',
   },
 ]
 
@@ -67,8 +68,7 @@ function PricingPage() {
           Simple pricing
         </h1>
         <p className="mx-auto mb-12 max-w-2xl text-center text-gray-600">
-          The Free plan includes everything you need for the MVP. Pro and Business
-          plans are placeholders for future paid tiers.
+          Try the demo free, or get the complete setup service for your business.
         </p>
 
         <div className="grid gap-6 md:grid-cols-3">
@@ -99,12 +99,21 @@ function PricingPage() {
                     </li>
                   ))}
                 </ul>
-                <Link
-                  to={plan.to}
-                  className={`block w-full rounded px-4 py-2 text-center text-sm font-medium transition-colors ${plan.highlighted ? 'bg-blue-600 text-white hover:bg-blue-700' : 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50'}`}
-                >
-                  {plan.cta}
-                </Link>
+                {plan.to.startsWith('mailto:') ? (
+                  <a
+                    href={plan.to}
+                    className={`block w-full rounded px-4 py-2 text-center text-sm font-medium transition-colors ${plan.highlighted ? 'bg-blue-600 text-white hover:bg-blue-700' : 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50'}`}
+                  >
+                    {plan.cta}
+                  </a>
+                ) : (
+                  <Link
+                    to={plan.to}
+                    className={`block w-full rounded px-4 py-2 text-center text-sm font-medium transition-colors ${plan.highlighted ? 'bg-blue-600 text-white hover:bg-blue-700' : 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50'}`}
+                  >
+                    {plan.cta}
+                  </Link>
+                )}
                 <Link
                   to="/leads"
                   className="mt-2 block w-full rounded px-4 py-2 text-center text-sm text-gray-500 transition-colors hover:text-gray-700"
@@ -117,8 +126,8 @@ function PricingPage() {
         </div>
 
         <p className="mt-12 text-center text-sm text-gray-400">
-          No authentication required. No backend. No credit card. All data stays in
-          your browser.
+          No authentication required. No backend. All data stays in
+          your browser. The €99 setup service is handled via email.
         </p>
       </div>
     </div>

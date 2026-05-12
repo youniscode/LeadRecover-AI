@@ -111,6 +111,21 @@ function LandingPage() {
           See Pricing
         </Link>
       </section>
+
+      <section className="bg-blue-600 px-4 py-20 text-center">
+        <h2 className="mb-4 text-3xl font-bold text-white">
+          Want this set up for your business?
+        </h2>
+        <p className="mx-auto mb-8 max-w-2xl text-lg text-blue-100">
+          I can set up LeadRecover AI for your local business, customize your follow-up message, prepare your Google review request message, and walk you through the workflow.
+        </p>
+        <a
+          href="mailto:contact@jonascode.com?subject=LeadRecover AI setup request"
+          className="inline-flex items-center justify-center rounded bg-white px-6 py-3 text-sm font-medium text-blue-600 transition-colors hover:bg-blue-50"
+        >
+          Get this set up for €99
+        </a>
+      </section>
     </div>
   )
 }
