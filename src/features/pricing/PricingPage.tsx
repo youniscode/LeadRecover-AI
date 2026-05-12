@@ -17,7 +17,7 @@ const plans: PlanProps[] = [
     name: 'Free',
     price: '€0',
     period: 'forever',
-    description: 'For testing and solo use.',
+    description: 'Try the public demo.',
     features: [
       'Lead capture form',
       'Pipeline management',
@@ -32,7 +32,7 @@ const plans: PlanProps[] = [
     name: '€99 setup service',
     price: '€99',
     period: 'one-time',
-    description: 'Done-for-you setup with a 20-minute walkthrough.',
+    description: 'Business setup + custom messages + walkthrough.',
     features: [
       'Everything in Free',
       'Custom follow-up message for your business',
@@ -48,7 +48,7 @@ const plans: PlanProps[] = [
     name: 'Custom setup',
     price: 'Custom',
     period: '',
-    description: 'For teams or agencies with unique needs.',
+    description: 'Team or agency setup.',
     features: [
       'Everything in Free',
       'Tailored setup for your team',
@@ -68,7 +68,7 @@ function PricingPage() {
           Simple pricing
         </h1>
         <p className="mx-auto mb-12 max-w-2xl text-center text-gray-600">
-          Try the demo free, or get the complete setup service for your business.
+          Try the public demo, or get a configured business setup.
         </p>
 
         <div className="grid gap-6 md:grid-cols-3">

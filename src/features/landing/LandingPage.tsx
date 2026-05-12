@@ -30,13 +30,17 @@ const steps = [
 function LandingPage() {
   return (
     <div>
+      <div className="bg-amber-50 border-b border-amber-200 px-4 py-2 text-center text-sm text-amber-800">
+        This is a public demo. Data is saved only in your browser. For a configured business setup,{' '}
+        <a href="mailto:contact@jonascode.com?subject=LeadRecover AI setup" className="underline font-medium">contact us</a>.
+      </div>
       <section className="bg-gradient-to-b from-blue-50 to-white px-4 py-20 text-center">
         <h1 className="mb-4 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
           Never Lose a Lead Again
         </h1>
         <p className="mx-auto mb-8 max-w-2xl text-lg text-gray-600">
           Capture, track, and recover every business opportunity. LeadRecover AI helps
-          local businesses reply faster and stay organised — no backend, no setup, just
+          local businesses reply faster and stay organised — no backend, just
           your browser.
         </p>
         <div className="flex flex-wrap justify-center gap-4">
@@ -117,7 +121,7 @@ function LandingPage() {
           Want this set up for your business?
         </h2>
         <p className="mx-auto mb-8 max-w-2xl text-lg text-blue-100">
-          I can set up LeadRecover AI for your local business, customize your follow-up message, prepare your Google review request message, and walk you through the workflow.
+          Try the demo for free, or request a €99 setup. I can set up LeadRecover AI for your local business, customize your follow-up message, prepare your Google review request message, and walk you through the workflow.
         </p>
         <a
           href="mailto:contact@jonascode.com?subject=LeadRecover AI setup request"

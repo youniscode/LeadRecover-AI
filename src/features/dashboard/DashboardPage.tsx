@@ -30,6 +30,11 @@ function DashboardPage() {
 
   if (leads.length === 0) {
     return (
+      <>
+      <div className="bg-amber-50 border-b border-amber-200 px-4 py-2 text-center text-sm text-amber-800">
+        This is a public demo. Data is saved only in your browser. For a configured business setup,{' '}
+        <a href="mailto:contact@jonascode.com?subject=LeadRecover AI setup" className="underline font-medium">contact us</a>.
+      </div>
       <div className="px-4 py-12">
         <div className="mx-auto max-w-4xl">
           <h1 className="mb-8 text-2xl font-bold text-gray-900">Dashboard</h1>
@@ -50,11 +55,17 @@ function DashboardPage() {
           </Card>
         </div>
       </div>
+    </>
     )
   }
 
   return (
-    <div className="px-4 py-12">
+    <>
+      <div className="bg-amber-50 border-b border-amber-200 px-4 py-2 text-center text-sm text-amber-800">
+        This is a public demo. Data is saved only in your browser. For a configured business setup,{' '}
+        <a href="mailto:contact@jonascode.com?subject=LeadRecover AI setup" className="underline font-medium">contact us</a>.
+      </div>
+      <div className="px-4 py-12">
       <div className="mx-auto max-w-4xl">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
@@ -108,6 +119,7 @@ function DashboardPage() {
         </div>
       </div>
     </div>
+    </>
   )
 }
 
